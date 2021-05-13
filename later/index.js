@@ -20,7 +20,14 @@ app.use(bodyParser.urlencoded({
 app.get('/articles', (req, res, next) => {
   Articel.all((err, articles) => {
     if (err) return next(err);
-    res.send(articles);
+    res.format({
+      html: () => {
+        res.render('articles.ejs', {articles: articles})
+      },
+      json: () => {
+        res.send(articles);
+      }
+    })
   })
 })
 app.post('/artices', (req, res, next) => {
@@ -40,7 +47,14 @@ app.get('/articles/:id', (req, res, next) => {
   const id = req.params.id;
   Articel.find(id, (err, articvle) => {
     if (err) return next(err)
-    res.send(articvle.content)
+    res.format({
+      html: () => {
+        res.render('article.ejs', {article: articvle})
+      },
+      json: () => {
+        res.send(articvle);
+      }
+    })
   })
 })
 app.delete('/articles/:id', (req, res, next) => {
